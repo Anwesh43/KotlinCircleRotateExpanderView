@@ -3,6 +3,7 @@ package ui.anwesome.com.circlerotateexpanderview
 /**
  * Created by anweshmishra on 04/03/18.
  */
+import android.app.Activity
 import android.content.*
 import android.graphics.*
 import android.view.*
@@ -116,6 +117,13 @@ class CircleRotateExpanderView(ctx : Context) : View(ctx) {
             circleRotateExpander?.startUpdating {
                 animator.start()
             }
+        }
+    }
+    companion object {
+        fun create(activity : Activity) : CircleRotateExpanderView {
+            val view = CircleRotateExpanderView(activity)
+            activity.setContentView(view)
+            return view
         }
     }
 }
