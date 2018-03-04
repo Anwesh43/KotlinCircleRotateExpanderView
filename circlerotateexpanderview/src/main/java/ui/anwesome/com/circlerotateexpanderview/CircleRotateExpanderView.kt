@@ -98,7 +98,12 @@ class CircleRotateExpanderView(ctx : Context) : View(ctx) {
                 val w = canvas.width.toFloat()
                 val h = canvas.height.toFloat()
                 circleRotateExpander = CircleRotateExpander(w/2, h/2, Math.min(w,h)/3)
+                paint.color = Color.parseColor("#2ecc71")
+                paint.style = Paint.Style.STROKE
+                paint.strokeWidth = Math.min(w,h)/50
+                paint.strokeCap = Paint.Cap.ROUND
             }
+            canvas.drawColor(Color.parseColor("#212121"))
             circleRotateExpander?.draw(canvas, paint)
             time++
             animator.animate {
