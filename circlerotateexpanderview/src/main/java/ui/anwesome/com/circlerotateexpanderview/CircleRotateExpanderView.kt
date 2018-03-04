@@ -21,7 +21,7 @@ class CircleRotateExpanderView(ctx : Context) : View(ctx) {
         }
         return true
     }
-    data class State(var dir : Float = 0f, var prevScale : Float = 0f, var jDir : Int = 0, var j : Int = 0) {
+    data class State(var dir : Float = 0f, var prevScale : Float = 0f, var jDir : Int = 1, var j : Int = 0) {
         val scales : Array<Float> = arrayOf(0f, 0f, 0f)
         fun update(stopcb : (Float) -> Unit) {
             scales[j] += 0.1f * dir
@@ -77,10 +77,16 @@ class CircleRotateExpanderView(ctx : Context) : View(ctx) {
             canvas.rotate(deg + 90f * state.scales[2])
             for(i in 0..3) {
                 canvas.save()
+                canvas.rotate(90f * i)
+                canvas.save()
                 canvas.translate(size * state.scales[1], 0f)
                 val r = size/10
                 canvas.drawArc(RectF(-r, -r, r, r), 0f, 360f * state.scales[0], false, paint)
                 canvas.restore()
+                canvas.restore()
+                if(state.j == 0) {
+                    break
+                }
             }
             canvas.restore()
         }
