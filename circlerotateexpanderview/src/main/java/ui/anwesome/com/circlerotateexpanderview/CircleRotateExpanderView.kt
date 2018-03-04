@@ -67,4 +67,26 @@ class CircleRotateExpanderView(ctx : Context) : View(ctx) {
             }
         }
     }
+    data class CircleRotateExpander(var x : Float, var y : Float, var size : Float, var deg : Float = 0f) {
+        val state = State()
+        fun draw(canvas : Canvas, paint : Paint) {
+            canvas.save()
+            canvas.translate(x, y)
+            canvas.rotate(deg + 90f * state.scales[2])
+            for(i in 0..3) {
+                canvas.save()
+                canvas.translate(size * state.scales[1], 0f)
+                val r = size/10
+                canvas.drawArc(RectF(-r, -r, r, r), 0f, 360f * state.scales[0], false, paint)
+                canvas.restore()
+            }
+            canvas.restore()
+        }
+        fun update(stopcb : (Float) -> Unit) {
+            state.update(stopcb)
+        }
+        fun startUpdating(startcb : () -> Unit) {
+            state.startUpdating(startcb)
+        }
+    }
 }
