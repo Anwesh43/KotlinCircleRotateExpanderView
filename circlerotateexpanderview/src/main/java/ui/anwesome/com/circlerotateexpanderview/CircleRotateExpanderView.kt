@@ -10,8 +10,12 @@ import android.view.*
 class CircleRotateExpanderView(ctx : Context) : View(ctx) {
     val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     val renderer = Renderer(this)
+    var rotateListener : OnRotateListener ?= null
     override fun onDraw(canvas : Canvas) {
         renderer.render(canvas, paint)
+    }
+    fun addOnRotateListener(onRotateListener : () -> Unit) {
+        rotateListener = OnRotateListener(onRotateListener)
     }
     override fun onTouchEvent(event : MotionEvent)  : Boolean {
         when(event.action) {
@@ -97,7 +101,7 @@ class CircleRotateExpanderView(ctx : Context) : View(ctx) {
             state.startUpdating(startcb)
         }
     }
-    data class Renderer(var view : View, var time : Int  = 0) {
+    data class Renderer(var view : CircleRotateExpanderView, var time : Int  = 0) {
         var circleRotateExpander : CircleRotateExpander ?= null
         val animator = Animator(view)
         fun render(canvas : Canvas, paint : Paint) {
@@ -116,6 +120,9 @@ class CircleRotateExpanderView(ctx : Context) : View(ctx) {
             animator.animate {
                 circleRotateExpander?.update {
                     animator.stop()
+                    when(it) {
+                        1f -> view.rotateListener?.onRotateListener?.invoke()
+                    }
                 }
             }
         }
@@ -132,4 +139,5 @@ class CircleRotateExpanderView(ctx : Context) : View(ctx) {
             return view
         }
     }
+    data class OnRotateListener(var onRotateListener : () -> Unit)
 }
