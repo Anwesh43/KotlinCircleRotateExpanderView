@@ -89,4 +89,27 @@ class CircleRotateExpanderView(ctx : Context) : View(ctx) {
             state.startUpdating(startcb)
         }
     }
+    data class Renderer(var view : View, var time : Int  = 0) {
+        var circleRotateExpander : CircleRotateExpander ?= null
+        val animator = Animator(view)
+        fun render(canvas : Canvas, paint : Paint) {
+            if(time == 0) {
+                val w = canvas.width.toFloat()
+                val h = canvas.height.toFloat()
+                circleRotateExpander = CircleRotateExpander(w/2, h/2, Math.min(w,h)/3)
+            }
+            circleRotateExpander?.draw(canvas, paint)
+            time++
+            animator.animate {
+                circleRotateExpander?.update {
+                    animator.stop()
+                }
+            }
+        }
+        fun handleTap() {
+            circleRotateExpander?.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
